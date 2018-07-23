@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>JavaSctiptの練習</title>
+  <style>
+    .field {
+      display: flex;
+      align-items: center;
+    }
+
+    .area {
+      width: 300px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .name.your {
+      background: #6dc9c8;
+    }
+
+    .name.enemy {
+      background: #ffc0c2;
+    }
+
+    .name {
+      font-weight: bold;
+    }
+
+    .result {
+      width: 100px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <p>ジャンケンの手をクリックしたら、相手のジャンケンの手がランダムで選択され勝敗が決まる。</p>
+  <button id="goBtn_guu">ぐー</button>
+  <button id="goBtn_choki">ちょき</button>
+  <button id="goBtn_paa">ぱー</button>
+
+  <div class="field">
+    <div class="area">
+      <p class="name your">あなた</p>
+      <p id="yourHand" class="hand"></p>
+    </div>
+    <p id="result" class="result"></p>
+    <div class="area">
+      <p class="name enemy">相手</p>
+      <p id="enemyHand" class="hand"></p>
+    </div>
+  </div>
+  <script>
+  // 相手の手を決める処理を関数にしておく ------------------------------------------
+/*
+  function decideEnemyHand() {
+    var random = Math.floor(Math.random() * 100); //乱数を取得
+
+    if (random < 34) { //0〜33だったらd=グーとする
+      var hand = 'ぐー';
+    } else if (random < 66) { //34〜65だったらd=チョキとする
+      var hand = 'ちょき';
+    } else {
+      var hand = 'ぱー'; //66〜99だったらd=パーとする
+    }
+    arrayHands.push(hand); //配列の末尾に取得した乱数を入れる
+    console.log(arrayHands);
+  }
+*/
+
+  // 勝敗を判定する処理を関数にしておく ------------------------------------------
+
+  // 結果を表示する場所を取得しておく ------------------------------------------
+  var yourHand = document.getElementById('yourHand'); //id="yourHand"で変更する要素を指定
+  var enemyHand = document.getElementById('enemyHand'); //id="enemyHand"で変更する要素を指定
+  var result = document.getElementById('result'); //id="result"で変更する要素を指定
+
+
+
+  // 自分がグーを選択した時 ------------------------------------------
+  document.getElementById('goBtn_guu').addEventListener('click', function() {
+    //ボタンをクリックした時に発動  ▼ここから▼
+
+    var arrayHands = new Array(); //乱数を入れる為の空の配列を用意
+    arrayHands.push('ぐー');
+
+
+    // 相手の手を決める ------------------------------------------
+    function decideEnemyHand() {
+      var random = Math.floor(Math.random() * 100); //乱数を取得
+
+      if (random < 34) { //0〜33だったらd=グーとする
+        var hand = 'ぐー';
+      } else if (random < 66) { //34〜65だったらd=チョキとする
+        var hand = 'ちょき';
+      } else {
+        var hand = 'ぱー'; //66〜99だったらd=パーとする
+      }
+      arrayHands.push(hand); //配列の末尾に取得した乱数を入れる
+      console.log(arrayHands);
+    }
+    decideEnemyHand();
+
+    // 勝敗を判定する ------------------------------------------
+    if (arrayHands[0] === arrayHands[1]) { //あいこのとき
+      console.log('あいこ');
+      var resultText = 'あいこ';
+    } else if (arrayHands[0] === 'ぐー') { //自分がグーのとき
+      if (arrayHands[1] === 'ちょき') { //【勝ち】相手がチョキのとき
+        console.log('勝ち');
+        var resultText = '勝ち';
+      } else { //【負け】相手がパーのとき
+        console.log('負け');
+        var resultText = '負け';
+      }
+    } else if (arrayHands[0] === 'ちょき') { //自分がチョキのとき
+      if (arrayHands[1] === 'ぱー') { //【勝ち】相手がパーのとき
+        console.log('勝ち');
+        var resultText = '勝ち';
+      } else { //【負け】相手がグーのとき
+        console.log('負け');
+        var resultText = '負け';
+      }
+    } else { //自分がパーの時
+      if (arrayHands[1] === 'ぐー') { //【勝ち】相手がグーのとき
+        console.log('勝ち');
+        var resultText = '勝ち';
+      } else { //【負け】相手がチョキのとき
+        console.log('負け');
+        var resultText = '負け';
+      }
+    }
+
+    // 結果を表示する ------------------------------------------
+    yourHand.textContent = arrayHands[0]; //自分の手を表示
+    enemyHand.textContent = arrayHands[1]; //相手の手を表示
+    result.textContent = resultText; //勝敗の結果を表示する
+
+    //ボタンをクリックした時に発動  ▲ここまで▲
+  });
+
+
+
+
+
+
+
+
+
+  // 自分がチョキを選択した時 ------------------------------------------
+  document.getElementById('goBtn_choki').addEventListener('click', function() {
+    //ボタンをクリックした時に発動  ▼ここから▼
+
+    var arrayHands = new Array(); //乱数を入れる為の空の配列を用意
+    arrayHands.push('ちょき');
+
+
+    // 相手の手を決める ------------------------------------------
+    function decideEnemyHand() {
+      var random = Math.floor(Math.random() * 100); //乱数を取得
+
+      if (random < 34) { //0〜33だったらd=グーとする
+        var hand = 'ぐー';
+      } else if (random < 66) { //34〜65だったらd=チョキとする
+        var hand = 'ちょき';
+      } else {
+        var hand = 'ぱー'; //66〜99だったらd=パーとする
+      }
+      arrayHands.push(hand); //配列の末尾に取得した乱数を入れる
+      console.log(arrayHands);
+    }
+    decideEnemyHand();
+
+    // 勝敗を判定する ------------------------------------------
+    if (arrayHands[0] === arrayHands[1]) { //あいこのとき
+      console.log('あいこ');
+      var resultText = 'あいこ';
+    } else if (arrayHands[0] === 'ぐー') { //自分がグーのとき
+      if (arrayHands[1] === 'ちょき') { //【勝ち】相手がチョキのとき
+        console.log('勝ち');
+        var resultText = '勝ち';
+      } else { //【負け】相手がパーのとき
+        console.log('負け');
+        var resultText = '負け';
+      }
+    } else if (arrayHands[0] === 'ちょき') { //自分がチョキのとき
+      if (arrayHands[1] === 'ぱー') { //【勝ち】相手がパーのとき
+        console.log('勝ち');
+        var resultText = '勝ち';
+      } else { //【負け】相手がグーのとき
+        console.log('負け');
+        var resultText = '負け';
+      }
+    } else { //自分がパーの時
+      if (arrayHands[1] === 'ぐー') { //【勝ち】相手がグーのとき
+        console.log('勝ち');
+        var resultText = '勝ち';
+      } else { //【負け】相手がチョキのとき
+        console.log('負け');
+        var resultText = '負け';
+      }
+    }
+
+    // 結果を表示する ------------------------------------------
+    yourHand.textContent = arrayHands[0]; //自分の手を表示
+    enemyHand.textContent = arrayHands[1]; //相手の手を表示
+    result.textContent = resultText; //勝敗の結果を表示する
+
+    //ボタンをクリックした時に発動  ▲ここまで▲
+  });
+
+
+
+
+
+
+
+
+
+
+  // 自分がパーを選択した時 ------------------------------------------
+  document.getElementById('goBtn_paa').addEventListener('click', function() {
+    //ボタンをクリックした時に発動  ▼ここから▼
+
+    var arrayHands = new Array(); //乱数を入れる為の空の配列を用意
+    arrayHands.push('ぱー');
+
+
+    // 相手の手を決める ------------------------------------------
+    function decideEnemyHand() {
+      var random = Math.floor(Math.random() * 100); //乱数を取得
+
+      if (random < 34) { //0〜33だったらd=グーとする
+        var hand = 'ぐー';
+      } else if (random < 66) { //34〜65だったらd=チョキとする
+        var hand = 'ちょき';
+      } else {
+        var hand = 'ぱー'; //66〜99だったらd=パーとする
+      }
+      arrayHands.push(hand); //配列の末尾に取得した乱数を入れる
+      console.log(arrayHands);
+    }
+    decideEnemyHand();
+
+    // 勝敗を判定する ------------------------------------------
+    if (arrayHands[0] === arrayHands[1]) { //あいこのとき
+      console.log('あいこ');
+      var resultText = 'あいこ';
+    } else if (arrayHands[0] === 'ぐー') { //自分がグーのとき
+      if (arrayHands[1] === 'ちょき') { //【勝ち】相手がチョキのとき
+        console.log('勝ち');
+        var resultText = '勝ち';
+      } else { //【負け】相手がパーのとき
+        console.log('負け');
+        var resultText = '負け';
+      }
+    } else if (arrayHands[0] === 'ちょき') { //自分がチョキのとき
+      if (arrayHands[1] === 'ぱー') { //【勝ち】相手がパーのとき
+        console.log('勝ち');
+        var resultText = '勝ち';
+      } else { //【負け】相手がグーのとき
+        console.log('負け');
+        var resultText = '負け';
+      }
+    } else { //自分がパーの時
+      if (arrayHands[1] === 'ぐー') { //【勝ち】相手がグーのとき
+        console.log('勝ち');
+        var resultText = '勝ち';
+      } else { //【負け】相手がチョキのとき
+        console.log('負け');
+        var resultText = '負け';
+      }
+    }
+
+    // 結果を表示する ------------------------------------------
+    yourHand.textContent = arrayHands[0]; //自分の手を表示
+    enemyHand.textContent = arrayHands[1]; //相手の手を表示
+    result.textContent = resultText; //勝敗の結果を表示する
+
+    //ボタンをクリックした時に発動  ▲ここまで▲
+  });
+
+
+
+  </script>
+</body>
+</html>

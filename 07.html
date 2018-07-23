@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>JavaSctiptの練習</title>
+  <style>
+    p {
+      margin: 0;
+    }
+
+    .field {
+      display: table;
+    }
+
+    .field > * {
+      display: table-cell;
+      vertical-align: middle;
+      border: 1px solid #ddd;
+      text-align: center;
+    }
+
+    .area {
+      position: relative;
+      width: 300px;
+      padding: 0 0 20px;
+      font-size: 14px;
+    }
+
+    .name.your {
+      background: #6dc9c8;
+    }
+
+    .name.enemy {
+      background: #ffc0c2;
+    }
+
+    .name {
+      margin-bottom: 15px;
+      padding: 10px 0;
+      font-weight: bold;
+    }
+
+    .result-area {
+      width: 100px;
+      border-left: 0;
+      border-right: 0;
+    }
+
+    .winner {
+      background: #fffdb7;
+    }
+
+    .final-result {
+      display: inline-block;
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      padding: 5px 10px;
+      background: #f00;
+      color: #fff;
+      font-weight: #fff;
+    }
+
+    .mb20 {
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <p class="mb20">3勝先取で勝ち</p>
+  <div class="mb20">
+    <button id="goBtn_guu">ぐー</button>
+    <button id="goBtn_choki">ちょき</button>
+    <button id="goBtn_paa">ぱー</button>
+    <button id="goBtn_reset">リセット</button>
+  </div>
+
+  <div id="field" class="field">
+    <div id="yourArea" class="area">
+      <p class="name your">あなた</p>
+      <p id="yourHand" class="hand"></p>
+      <p>勝ち：<span id="yourWin">0</span></p>
+    </div>
+    <div class="result-area">
+      <p><span id ="gameCounter">0</span>回戦</p>
+      <p id="result"></p>
+    </div>
+    <div id="enemyArea" class="area">
+      <p class="name enemy">相手</p>
+      <p id="enemyHand" class="hand"></p>
+      <p>勝ち：<span id="enemyWin">0</span></p>
+    </div>
+  </div>
+  <script>
+  // 相手の手を決める処理を関数にしておく ------------------------------------------
+/*
+  function decideEnemyHand() {
+    var random = Math.floor(Math.random() * 100); //乱数を取得
+
+    if (random < 34) { //0〜33だったらd=グーとする
+      var hand = 'ぐー';
+    } else if (random < 66) { //34〜65だったらd=チョキとする
+      var hand = 'ちょき';
+    } else {
+      var hand = 'ぱー'; //66〜99だったらd=パーとする
+    }
+    arrayHands.push(hand); //配列の末尾に取得した乱数を入れる
+    console.log(arrayHands);
+  }
+*/
+
+  // 勝敗を判定する処理を関数にしておく ------------------------------------------
+
+
+  // ボタンの無効化処理を関数にしておく ------------------------------------------
+  function buttonDisabled() {
+    document.getElementById("goBtn_guu").disabled = "true";
+    document.getElementById("goBtn_choki").disabled = "true";
+    document.getElementById("goBtn_paa").disabled = "true";
+  }
+
+
+  // 勝敗表示を関数にしておく ------------------------------------------
+/*
+  function GenerateResultParts() {
+    var finalResult = document.createElement('p'); //「pタグを作ります」というアクションに名前を付ける finalResult
+    finalResult.setAttribute('id', 'finalResult'); //finalResultでidも付けるよ
+    finalResult.setAttribute('class', 'final-result'); //finalResultでclassも付けるよ
+//      finalResult.className = 'final-result'; //これでもclass付けられる
+    var text = document.createTextNode('WIN！'); //「こういうテキストを作ります」というアクションに名前を付ける text
+  }
+*/
+
+
+  // 結果を表示する場所を取得しておく ------------------------------------------
+  var yourHand = document.getElementById('yourHand'); //id="yourHand"で変更する要素を指定
+  var enemyHand = document.getElementById('enemyHand'); //id="enemyHand"で変更する要素を指定
+  var result = document.getElementById('result'); //id="result"で変更する要素を指定
+  var yourWin = document.getElementById('yourWin'); //id="yourWin"で変更する要素を指定
+  var enemyWin = document.getElementById('enemyWin'); //id="enemyWin"で変更する要素を指定
+  var yourArea = document.getElementById('yourArea'); //id="yourArea"で変更する要素を指定
+  var enemyArea = document.getElementById('enemyArea'); //id="enemyArea"で変更する要素を指定
+  var gameCounter = document.getElementById('gameCounter'); //id="gameCounter"で変更する要素を指定
+  var field = document.getElementById('field'); //id="field"で変更する要素を指定
+
+
+
+
+  // カウントをゼロに設定 ------------------------------------------
+  var yourWinCount = 0,
+      enemyWinCount = 0,
+      gameCount = 0;
+
+
+
+
+
+
+
+
+
+  // 自分がグーを選択した時 ------------------------------------------
+  document.getElementById('goBtn_guu').addEventListener('click', function() {
+    //ボタンをクリックした時に発動  ▼ここから▼
+
+    // 何回戦かカウント
+    gameCount++;
+    gameCounter.textContent = gameCount;
+
+    var arrayHands = new Array(); //乱数を入れる為の空の配列を用意
+    arrayHands.push('ぐー');
+
+    // 相手の手を決める ------------------------------------------
+    function decideEnemyHand() {
+      var random = Math.floor(Math.random() * 100); //乱数を取得
+
+      if (random < 34) { //0〜33だったらd=グーとする
+        var hand = 'ぐー';
+      } else if (random < 66) { //34〜65だったらd=チョキとする
+        var hand = 'ちょき';
+      } else {
+        var hand = 'ぱー'; //66〜99だったらd=パーとする
+      }
+      arrayHands.push(hand); //配列の末尾に取得した乱数を入れる
+      console.log(arrayHands);
+    }
+    decideEnemyHand();
+
+    // 勝敗を判定する ------------------------------------------
+    if (arrayHands[0] === arrayHands[1]) { //あいこのとき
+      console.log('あいこ');
+      var resultText = 'あいこ';
+    } else if (arrayHands[0] === 'ぐー') { //自分がグーのとき
+      if (arrayHands[1] === 'ちょき') { //【勝ち】相手がチョキのとき
+        console.log('勝ち');
+        var resultText = '勝ち';
+      } else { //【負け】相手がパーのとき
+        console.log('負け');
+        var resultText = '負け';
+      }
+    } else if (arrayHands[0] === 'ちょき') { //自分がチョキのとき
+      if (arrayHands[1] === 'ぱー') { //【勝ち】相手がパーのとき
+        console.log('勝ち');
+        var resultText = '勝ち';
+      } else { //【負け】相手がグーのとき
+        console.log('負け');
+        var resultText = '負け';
+      }
+    } else { //自分がパーの時
+      if (arrayHands[1] === 'ぐー') { //【勝ち】相手がグーのとき
+        console.log('勝ち');
+        var resultText = '勝ち';
+      } else { //【負け】相手がチョキのとき
+        console.log('負け');
+        var resultText = '負け';
+      }
+    }
+
+
+    // 結果をカウントする ------------------------------------------
+    if (resultText === '勝ち') {
+      yourWinCount++; //勝ったらカウントアップ
+    } else if (resultText === '負け') {
+      enemyWinCount++; //負けたらカウントアップ
+    }
+    console.log('yourWinCount=' + yourWinCount);
+    console.log('enemyWinCount=' + enemyWinCount);
+
+
+    // 結果を表示する ------------------------------------------
+    yourHand.textContent = arrayHands[0]; //自分の手を表示
+    enemyHand.textContent = arrayHands[1]; //相手の手を表示
+    result.textContent = resultText; //勝敗の結果を表示する
+    yourWin.textContent = yourWinCount; //自分の勝ち数を表示
+    enemyWin.textContent = enemyWinCount; //相手の勝ち数を表示
+
+    // 3勝したら最終結果を表示ストップ
+    if (yourWinCount === 3) {
+      buttonDisabled();
+      yourArea.classList.add('winner'); //classを追加
+      var finalResult = document.createElement('p'); //「pタグを作ります」というアクションに名前を付ける finalResult
+      finalResult.setAttribute('id', 'finalResult'); //finalResultでidも付けるよ
+      finalResult.setAttribute('class', 'final-result'); //finalResultでclassも付けるよ
+//      finalResult.className = 'final-result'; //これでもclass付けられる
+      var text = document.createTextNode('WIN！'); //「こういうテキストを作ります」というアクションに名前を付ける text
+      yourArea.appendChild(finalResult).appendChild(text); //DOMにHTMLを生成
+
+    } else if (enemyWinCount === 3) {
+      buttonDisabled();
+      enemyArea.classList.add('winner'); //classを追加
+      var finalResult = document.createElement('p'); //「pタグを作ります」というアクションに名前を付ける finalResult
+      finalResult.setAttribute('id', 'finalResult'); //finalResultでidも付けるよ
+      finalResult.setAttribute('class', 'final-result'); //finalResultでclassも付けるよ
+//      finalResult.className = 'final-result'; //これでもclass付けられる
+      var text = document.createTextNode('WIN！'); //「こういうテキストを作ります」というアクションに名前を付ける text
+      enemyArea.appendChild(finalResult).appendChild(text); //DOMにHTMLを生成
+    }
+
+
+    //ボタンをクリックした時に発動  ▲ここまで▲
+  });
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // 自分がチョキを選択した時 ------------------------------------------
+  document.getElementById('goBtn_choki').addEventListener('click', function() {
+    //ボタンをクリックした時に発動  ▼ここから▼
+
+    // 何回戦かカウント
+    gameCount++;
+    gameCounter.textContent = gameCount;
+
+    var arrayHands = new Array(); //乱数を入れる為の空の配列を用意
+    arrayHands.push('ちょき');
+
+
+    // 相手の手を決める ------------------------------------------
+    function decideEnemyHand() {
+      var random = Math.floor(Math.random() * 100); //乱数を取得
+
+      if (random < 34) { //0〜33だったらd=グーとする
+        var hand = 'ぐー';
+      } else if (random < 66) { //34〜65だったらd=チョキとする
+        var hand = 'ちょき';
+      } else {
+        var hand = 'ぱー'; //66〜99だったらd=パーとする
+      }
+      arrayHands.push(hand); //配列の末尾に取得した乱数を入れる
+      console.log(arrayHands);
+    }
+    decideEnemyHand();
+
+    // 勝敗を判定する ------------------------------------------
+    if (arrayHands[0] === arrayHands[1]) { //あいこのとき
+      console.log('あいこ');
+      var resultText = 'あいこ';
+    } else if (arrayHands[0] === 'ぐー') { //自分がグーのとき
+      if (arrayHands[1] === 'ちょき') { //【勝ち】相手がチョキのとき
+        console.log('勝ち');
+        var resultText = '勝ち';
+      } else { //【負け】相手がパーのとき
+        console.log('負け');
+        var resultText = '負け';
+      }
+    } else if (arrayHands[0] === 'ちょき') { //自分がチョキのとき
+      if (arrayHands[1] === 'ぱー') { //【勝ち】相手がパーのとき
+        console.log('勝ち');
+        var resultText = '勝ち';
+      } else { //【負け】相手がグーのとき
+        console.log('負け');
+        var resultText = '負け';
+      }
+    } else { //自分がパーの時
+      if (arrayHands[1] === 'ぐー') { //【勝ち】相手がグーのとき
+        console.log('勝ち');
+        var resultText = '勝ち';
+      } else { //【負け】相手がチョキのとき
+        console.log('負け');
+        var resultText = '負け';
+      }
+    }
+
+    // 結果をカウントする ------------------------------------------
+    if (resultText === '勝ち') {
+      yourWinCount++; //勝ったらカウントアップ
+    } else if (resultText === '負け') {
+      enemyWinCount++; //負けたらカウントアップ
+    }
+    console.log('yourWinCount=' + yourWinCount);
+    console.log('enemyWinCount=' + enemyWinCount);
+
+
+    // 結果を表示する ------------------------------------------
+    yourHand.textContent = arrayHands[0]; //自分の手を表示
+    enemyHand.textContent = arrayHands[1]; //相手の手を表示
+    result.textContent = resultText; //勝敗の結果を表示する
+    yourWin.textContent = yourWinCount; //自分の勝ち数を表示
+    enemyWin.textContent = enemyWinCount; //相手の勝ち数を表示
+
+    // 3勝したら最終結果を表示ストップ
+    if (yourWinCount === 3) {
+      buttonDisabled();
+      yourArea.classList.add('winner'); //classを追加
+      var finalResult = document.createElement('p'); //「pタグを作ります」というアクションに名前を付ける finalResult
+      finalResult.setAttribute('id', 'finalResult'); //finalResultでidも付けるよ
+      finalResult.setAttribute('class', 'final-result'); //finalResultでclassも付けるよ
+//      finalResult.className = 'final-result'; //これでもclass付けられる
+      var text = document.createTextNode('WIN！'); //「こういうテキストを作ります」というアクションに名前を付ける text
+      yourArea.appendChild(finalResult).appendChild(text); //DOMにHTMLを生成
+
+
+    } else if (enemyWinCount === 3) {
+      buttonDisabled();
+      enemyArea.classList.add('winner'); //classを追加
+      var finalResult = document.createElement('p'); //「pタグを作ります」というアクションに名前を付ける finalResult
+      finalResult.setAttribute('id', 'finalResult'); //finalResultでidも付けるよ
+      finalResult.setAttribute('class', 'final-result'); //finalResultでclassも付けるよ
+//      finalResult.className = 'final-result'; //これでもclass付けられる
+      var text = document.createTextNode('WIN！'); //「こういうテキストを作ります」というアクションに名前を付ける text
+      enemyArea.appendChild(finalResult).appendChild(text); //DOMにHTMLを生成
+    }
+
+    //ボタンをクリックした時に発動  ▲ここまで▲
+  });
+
+
+
+
+
+
+
+
+
+
+
+
+  // 自分がパーを選択した時 ------------------------------------------
+  document.getElementById('goBtn_paa').addEventListener('click', function() {
+    //ボタンをクリックした時に発動  ▼ここから▼
+
+    // 何回戦かカウント
+    gameCount++;
+    gameCounter.textContent = gameCount;
+
+    var arrayHands = new Array(); //乱数を入れる為の空の配列を用意
+    arrayHands.push('ぱー');
+
+
+    // 相手の手を決める ------------------------------------------
+    function decideEnemyHand() {
+      var random = Math.floor(Math.random() * 100); //乱数を取得
+
+      if (random < 34) { //0〜33だったらd=グーとする
+        var hand = 'ぐー';
+      } else if (random < 66) { //34〜65だったらd=チョキとする
+        var hand = 'ちょき';
+      } else {
+        var hand = 'ぱー'; //66〜99だったらd=パーとする
+      }
+      arrayHands.push(hand); //配列の末尾に取得した乱数を入れる
+      console.log(arrayHands);
+    }
+    decideEnemyHand();
+
+    // 勝敗を判定する ------------------------------------------
+    if (arrayHands[0] === arrayHands[1]) { //あいこのとき
+      console.log('あいこ');
+      var resultText = 'あいこ';
+    } else if (arrayHands[0] === 'ぐー') { //自分がグーのとき
+      if (arrayHands[1] === 'ちょき') { //【勝ち】相手がチョキのとき
+        console.log('勝ち');
+        var resultText = '勝ち';
+      } else { //【負け】相手がパーのとき
+        console.log('負け');
+        var resultText = '負け';
+      }
+    } else if (arrayHands[0] === 'ちょき') { //自分がチョキのとき
+      if (arrayHands[1] === 'ぱー') { //【勝ち】相手がパーのとき
+        console.log('勝ち');
+        var resultText = '勝ち';
+      } else { //【負け】相手がグーのとき
+        console.log('負け');
+        var resultText = '負け';
+      }
+    } else { //自分がパーの時
+      if (arrayHands[1] === 'ぐー') { //【勝ち】相手がグーのとき
+        console.log('勝ち');
+        var resultText = '勝ち';
+      } else { //【負け】相手がチョキのとき
+        console.log('負け');
+        var resultText = '負け';
+      }
+    }
+
+    // 結果をカウントする ------------------------------------------
+    if (resultText === '勝ち') {
+      yourWinCount++; //勝ったらカウントアップ
+    } else if (resultText === '負け') {
+      enemyWinCount++; //負けたらカウントアップ
+    }
+    console.log('yourWinCount=' + yourWinCount);
+    console.log('enemyWinCount=' + enemyWinCount);
+
+
+    // 結果を表示する ------------------------------------------
+    yourHand.textContent = arrayHands[0]; //自分の手を表示
+    enemyHand.textContent = arrayHands[1]; //相手の手を表示
+    result.textContent = resultText; //勝敗の結果を表示する
+    yourWin.textContent = yourWinCount; //自分の勝ち数を表示
+    enemyWin.textContent = enemyWinCount; //相手の勝ち数を表示
+
+    // 3勝したら最終結果を表示ストップ
+    if (yourWinCount === 3) {
+      buttonDisabled();
+      yourArea.classList.add('winner'); //classを追加
+      var finalResult = document.createElement('p'); //「pタグを作ります」というアクションに名前を付ける finalResult
+      finalResult.setAttribute('id', 'finalResult'); //finalResultでidも付けるよ
+      finalResult.setAttribute('class', 'final-result'); //finalResultでclassも付けるよ
+//      finalResult.className = 'final-result'; //これでもclass付けられる
+      var text = document.createTextNode('WIN！'); //「こういうテキストを作ります」というアクションに名前を付ける text
+      yourArea.appendChild(finalResult).appendChild(text); //DOMにHTMLを生成
+
+
+    } else if (enemyWinCount === 3) {
+      buttonDisabled();
+      enemyArea.classList.add('winner'); //classを追加
+      var finalResult = document.createElement('p'); //「pタグを作ります」というアクションに名前を付ける finalResult
+      finalResult.setAttribute('id', 'finalResult'); //finalResultでidも付けるよ
+      finalResult.setAttribute('class', 'final-result'); //finalResultでclassも付けるよ
+//      finalResult.className = 'final-result'; //これでもclass付けられる
+      var text = document.createTextNode('WIN！'); //「こういうテキストを作ります」というアクションに名前を付ける text
+      enemyArea.appendChild(finalResult).appendChild(text); //DOMにHTMLを生成
+    }
+
+    //ボタンをクリックした時に発動  ▲ここまで▲
+  });
+
+
+  // リセット機能 ------------------------------------------
+  document.getElementById('goBtn_reset').addEventListener('click', function() {
+    yourWinCount = 0;
+    enemyWinCount = 0;
+    gameCount = 0;
+    yourWin.textContent = yourWinCount; //自分の勝ち数を再表示
+    enemyWin.textContent = enemyWinCount; //相手の勝ち数を再表示
+    gameCounter.textContent = gameCount; //何回戦か再表示
+    yourHand.textContent = ''; //自分の手を空にして再表示
+    enemyHand.textContent = ''; //相手の手を空にして再表示
+    result.textContent = ''; //勝敗の結果を空にして再表示
+
+    if (document.getElementById("finalResult") !== null) { //【WIN！】があったら
+      finalResult.parentNode.removeChild(finalResult); //最終結果の要素を削除
+    }
+
+    yourArea.classList.remove('winner'); //class=winnerを削除
+    enemyArea.classList.remove('winner'); //class=winnerを削除
+
+
+    document.getElementById("goBtn_guu").disabled = ""; //ボタンを有効化
+    document.getElementById("goBtn_choki").disabled = ""; //ボタンを有効化
+    document.getElementById("goBtn_paa").disabled = ""; //ボタンを有効化
+  });
+
+
+  </script>
+</body>
+</html>

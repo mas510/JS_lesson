@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>JavaSctiptの練習</title>
+  <style>
+  </style>
+</head>
+<body>
+  <p>ボタンをクリックしたら、ランダムに数値を取得</p>
+  <button id="getNumberBtn">ボタン</button>
+  <p id="result"></p>
+  <script>
+
+  document.getElementById('getNumberBtn').addEventListener('click', function() {
+    //ボタンをクリックした時に発動  ▼ここから▼
+
+    //ランダムに0〜99の数値を取得する
+    var a = Math.random(); //0以上1未満のランダムな数値を取得
+    var b = Math.floor(a * 100); //aを整数値に変換
+    var c = document.getElementById('result'); //id="result"で変更する要素を指定
+    c.textContent = b; //中身をbにする
+
+    //ボタンをクリックした時に発動  ▲ここまで▲
+  });
+
+
+
+
+  </script>
+</body>
+</html>

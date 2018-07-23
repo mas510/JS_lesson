@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>JavaSctiptの練習</title>
+  <style>
+  </style>
+</head>
+<body>
+  <p>ボタンをクリックしたら、ジャンケンの手がランダムで選択される</p>
+  <button id="goBtn">ボタン</button>
+  <p id="result"></p>
+  <script>
+
+  document.getElementById('goBtn').addEventListener('click', function() {
+    //ボタンをクリックした時に発動  ▼ここから▼
+
+    //ランダムに0〜99の数値を取得する
+    var a = Math.random(); //0以上1未満のランダムな数値を取得
+    var b = Math.floor(a * 100); //aを整数値に変換
+
+    if (b < 34) { //0〜33だったらd=グーとする
+      var d = 'ぐー';
+    } else if (b < 66) { //34〜65だったらd=チョキとする
+      var d = 'ちょき';
+    } else {
+      var d = 'ぱー'; //66〜99だったらd=パーとする
+    }
+
+    var c = document.getElementById('result'); //id="result"で変更する要素を指定
+    c.textContent = b + d; //中身を【ランダム数値＋結果】にする
+
+    //ボタンをクリックした時に発動  ▲ここまで▲
+  });
+
+
+  </script>
+</body>
+</html>
