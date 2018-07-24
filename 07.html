@@ -92,25 +92,6 @@
     </div>
   </div>
   <script>
-  // 相手の手を決める処理を関数にしておく ------------------------------------------
-/*
-  function decideEnemyHand() {
-    var random = Math.floor(Math.random() * 100); //乱数を取得
-
-    if (random < 34) { //0〜33だったらd=グーとする
-      var hand = 'ぐー';
-    } else if (random < 66) { //34〜65だったらd=チョキとする
-      var hand = 'ちょき';
-    } else {
-      var hand = 'ぱー'; //66〜99だったらd=パーとする
-    }
-    arrayHands.push(hand); //配列の末尾に取得した乱数を入れる
-    console.log(arrayHands);
-  }
-*/
-
-  // 勝敗を判定する処理を関数にしておく ------------------------------------------
-
 
   // ボタンの無効化処理を関数にしておく ------------------------------------------
   function buttonDisabled() {
@@ -118,19 +99,6 @@
     document.getElementById("goBtn_choki").disabled = "true";
     document.getElementById("goBtn_paa").disabled = "true";
   }
-
-
-  // 勝敗表示を関数にしておく ------------------------------------------
-/*
-  function GenerateResultParts() {
-    var finalResult = document.createElement('p'); //「pタグを作ります」というアクションに名前を付ける finalResult
-    finalResult.setAttribute('id', 'finalResult'); //finalResultでidも付けるよ
-    finalResult.setAttribute('class', 'final-result'); //finalResultでclassも付けるよ
-//      finalResult.className = 'final-result'; //これでもclass付けられる
-    var text = document.createTextNode('WIN！'); //「こういうテキストを作ります」というアクションに名前を付ける text
-  }
-*/
-
 
   // 結果を表示する場所を取得しておく ------------------------------------------
   var yourHand = document.getElementById('yourHand'); //id="yourHand"で変更する要素を指定
@@ -143,21 +111,10 @@
   var gameCounter = document.getElementById('gameCounter'); //id="gameCounter"で変更する要素を指定
   var field = document.getElementById('field'); //id="field"で変更する要素を指定
 
-
-
-
   // カウントをゼロに設定 ------------------------------------------
   var yourWinCount = 0,
       enemyWinCount = 0,
       gameCount = 0;
-
-
-
-
-
-
-
-
 
   // 自分がグーを選択した時 ------------------------------------------
   document.getElementById('goBtn_guu').addEventListener('click', function() {
@@ -216,7 +173,6 @@
       }
     }
 
-
     // 結果をカウントする ------------------------------------------
     if (resultText === '勝ち') {
       yourWinCount++; //勝ったらカウントアップ
@@ -225,7 +181,6 @@
     }
     console.log('yourWinCount=' + yourWinCount);
     console.log('enemyWinCount=' + enemyWinCount);
-
 
     // 結果を表示する ------------------------------------------
     yourHand.textContent = arrayHands[0]; //自分の手を表示
@@ -244,7 +199,6 @@
 //      finalResult.className = 'final-result'; //これでもclass付けられる
       var text = document.createTextNode('WIN！'); //「こういうテキストを作ります」というアクションに名前を付ける text
       yourArea.appendChild(finalResult).appendChild(text); //DOMにHTMLを生成
-
     } else if (enemyWinCount === 3) {
       buttonDisabled();
       enemyArea.classList.add('winner'); //classを追加
@@ -256,21 +210,8 @@
       enemyArea.appendChild(finalResult).appendChild(text); //DOMにHTMLを生成
     }
 
-
     //ボタンをクリックした時に発動  ▲ここまで▲
   });
-
-
-
-
-
-
-
-
-
-
-
-
 
   // 自分がチョキを選択した時 ------------------------------------------
   document.getElementById('goBtn_choki').addEventListener('click', function() {
@@ -283,7 +224,6 @@
     var arrayHands = new Array(); //乱数を入れる為の空の配列を用意
     arrayHands.push('ちょき');
 
-
     // 相手の手を決める ------------------------------------------
     function decideEnemyHand() {
       var random = Math.floor(Math.random() * 100); //乱数を取得
@@ -339,7 +279,6 @@
     console.log('yourWinCount=' + yourWinCount);
     console.log('enemyWinCount=' + enemyWinCount);
 
-
     // 結果を表示する ------------------------------------------
     yourHand.textContent = arrayHands[0]; //自分の手を表示
     enemyHand.textContent = arrayHands[1]; //相手の手を表示
@@ -357,8 +296,6 @@
 //      finalResult.className = 'final-result'; //これでもclass付けられる
       var text = document.createTextNode('WIN！'); //「こういうテキストを作ります」というアクションに名前を付ける text
       yourArea.appendChild(finalResult).appendChild(text); //DOMにHTMLを生成
-
-
     } else if (enemyWinCount === 3) {
       buttonDisabled();
       enemyArea.classList.add('winner'); //classを追加
@@ -372,17 +309,6 @@
 
     //ボタンをクリックした時に発動  ▲ここまで▲
   });
-
-
-
-
-
-
-
-
-
-
-
 
   // 自分がパーを選択した時 ------------------------------------------
   document.getElementById('goBtn_paa').addEventListener('click', function() {
@@ -395,7 +321,6 @@
     var arrayHands = new Array(); //乱数を入れる為の空の配列を用意
     arrayHands.push('ぱー');
 
-
     // 相手の手を決める ------------------------------------------
     function decideEnemyHand() {
       var random = Math.floor(Math.random() * 100); //乱数を取得
@@ -451,7 +376,6 @@
     console.log('yourWinCount=' + yourWinCount);
     console.log('enemyWinCount=' + enemyWinCount);
 
-
     // 結果を表示する ------------------------------------------
     yourHand.textContent = arrayHands[0]; //自分の手を表示
     enemyHand.textContent = arrayHands[1]; //相手の手を表示
@@ -469,8 +393,6 @@
 //      finalResult.className = 'final-result'; //これでもclass付けられる
       var text = document.createTextNode('WIN！'); //「こういうテキストを作ります」というアクションに名前を付ける text
       yourArea.appendChild(finalResult).appendChild(text); //DOMにHTMLを生成
-
-
     } else if (enemyWinCount === 3) {
       buttonDisabled();
       enemyArea.classList.add('winner'); //classを追加
@@ -484,7 +406,6 @@
 
     //ボタンをクリックした時に発動  ▲ここまで▲
   });
-
 
   // リセット機能 ------------------------------------------
   document.getElementById('goBtn_reset').addEventListener('click', function() {
@@ -505,13 +426,10 @@
     yourArea.classList.remove('winner'); //class=winnerを削除
     enemyArea.classList.remove('winner'); //class=winnerを削除
 
-
     document.getElementById("goBtn_guu").disabled = ""; //ボタンを有効化
     document.getElementById("goBtn_choki").disabled = ""; //ボタンを有効化
     document.getElementById("goBtn_paa").disabled = ""; //ボタンを有効化
   });
-
-
   </script>
 </body>
 </html>
